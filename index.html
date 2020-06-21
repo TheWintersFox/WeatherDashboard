@@ -37,8 +37,8 @@
 </p>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <scritp src="htt[s:/api.windy.com/assets/map-forecast/libBoot.js"></scritp>
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <!-- <script src="htt[s:/api.windy.com/assets/map-forecast/libBoot.js"></scriptp>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script> -->
 
     <script type="text/javascript">
 
@@ -50,20 +50,19 @@
             let humidity = $('humidity');
             let wind = $('wind');
             let uvindex = $('uvindex');
-            
-            
-
-            let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + "cityName" + "&appid=659fbea36ce862302794b0cd7f9677f7";
+            let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + Raleigh + "&appid=f57dad49816ca611b4f033260a8b949d";
+           
             $.ajax({
                 url: queryURL,
                 method: "GET"
             }).then(function (response) {
                 console.log(response);
+                console.log(cityName)
                 let tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
-                console.log(response.Runtime);
+                $('#cityName').append(cityName);
             });
             ;
-        }
+        });
     </script>
 </body>
 
