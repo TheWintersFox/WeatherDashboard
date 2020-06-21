@@ -35,12 +35,23 @@
 
     </div>
 </p>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <scritp src="htt[s:/api.windy.com/assets/map-forecast/libBoot.js"></scritp>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
 
     <script type="text/javascript">
 
         $('#btn-click').on('click', function () {
-            const cityName = $('#citySearch')
+            const cityName = $('#citySearch').val();
+            let date = $('date');
+            let icon = $('icon');
+            let temp = $('temp');
+            let humidity = $('humidity');
+            let wind = $('wind');
+            let uvindex = $('uvindex');
+            
+            
 
             let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + "cityName" + "&appid=659fbea36ce862302794b0cd7f9677f7";
             $.ajax({
