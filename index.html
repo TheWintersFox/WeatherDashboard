@@ -42,7 +42,8 @@
 
     <script type="text/javascript">
 
-        $('#btn-click').on('click', function () {
+        $('#btn-click').on('click', function (e) {
+            e.preventDefault()
             const cityName = $('#citySearch').val();
             let date = $('date');
             let icon = $('icon');
@@ -50,7 +51,7 @@
             let humidity = $('humidity');
             let wind = $('wind');
             let uvindex = $('uvindex');
-            let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + Raleigh + "&appid=f57dad49816ca611b4f033260a8b949d";
+            let queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=f57dad49816ca611b4f033260a8b949d";
            
             $.ajax({
                 url: queryURL,
@@ -61,7 +62,7 @@
                 let tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
                 $('#cityName').append(cityName);
             });
-            ;
+            
         });
     </script>
 </body>
