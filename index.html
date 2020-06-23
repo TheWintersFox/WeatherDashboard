@@ -17,52 +17,95 @@
             <div id="col-md-12">This is a column
                 <form>
                     City: <input type="text" id="citySearch">
-                    <button id="btn-click">This is a button</button>
+                    <button class="btn-click">This is a button</button>
                 </form>
             </div>
         </div>
     </div>
-    
-<div class="row">
-    <div class="col">
-        <p id="cityName">City:</p>
-        <p id="date">Date:</p>
-        <p id="icon">Icon</p>
-        <p id="temp">Temp</p>
-        <p id="humidity">Humidity:</p>
-        <p id="wind">Wind Speeds: </p>
-        <p id="uvindex">UV index: </p>
 
+    <div class="row">
+        <div class="col">
+            <p id="cityName">City:</p>
+            <p id="date">Date:</p>
+            <p id="icon">Icon:</p>
+            <p id="temp">Temp:</p>
+            <p id="humidity">Humidity:</p>
+            <p id="wind">Wind Speeds: </p>
+            <p id="uvindex">UV index: </p>
+
+        </div>
     </div>
-</p>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- <script src="htt[s:/api.windy.com/assets/map-forecast/libBoot.js"></scriptp>
-    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script> -->
+         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script> -->
 
     <script type="text/javascript">
 
-        $('#btn-click').on('click', function () {
+
+
+        $('.btn-click').on('click', function (e) {
+            e.preventDefault()
             const cityName = $('#citySearch').val();
-            let date = $('date');
-            let icon = $('icon');
-            let temp = $('temp');
-            let humidity = $('humidity');
-            let wind = $('wind');
-            let uvindex = $('uvindex');
-            let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + Raleigh + "&appid=f57dad49816ca611b4f033260a8b949d";
-           
+            let date = $('#date');
+            let icon = $('#icon');
+            let temp = $('#temp');
+            let humidity = $('#humidity');
+            let wind = $('#wind');
+            let uvindex = $('#uvindex');
+            let lat = 0
+            let lon = 0
+            let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=f57dad49816ca611b4f033260a8b949d";
+
+
+
+            var retrieveWeekdayMoDay = (moment().format('dddd, MMMM Do/ h:mm:ss a'));
             $.ajax({
                 url: queryURL,
                 method: "GET"
             }).then(function (response) {
                 console.log(response);
-                console.log(cityName)
+                console.log(cityName);
                 let tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
                 $('#cityName').append(cityName);
+
+
+
+                //Retrieving moment JS information for the current date/ time/ month
+                $('#date').append(retrieveWeekdayMoDay)
+
+
+                // Pulling from temp from API
+                console.log(response.main.temp);
+                temp.append(tempF);
+
+                // Pulling from humidity from API 
+                console.log(response.main.humidity);
+                humidity.append(response.main.humidity);
+
+                // Pulling from wind from API
+                console.log(response.wind.speed);
+                wind.append(response.wind.speed);
+
+
+                // lat = response.coord.lat
+                // lon = response.coord.lon
+                //https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly,daily&appid={YOUR API KEY}
+                let queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?" + 'lat=' + lat + '&lon=' + lon + "&exclude=minutely,hourly" + "&appid=f57dad49816ca611b4f033260a8b949d"
+                $.ajax({
+                    url: queryURL2,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log(response)
+                    uvindex.append(response.current.uvi)
+                });
+
             });
-            ;
+
         });
+
+
     </script>
 </body>
 
