@@ -35,6 +35,7 @@
                     <p id="temp">Temp:</p>
                     <p id="humidity">Humidity:</p>
                     <p id="wind">Wind Speeds: </p>
+
                 </div>
             </div>
         </div>
@@ -155,7 +156,7 @@
                 // lat = response.coord.lat
                 // lon = response.coord.lon
                 //https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly,daily&appid={YOUR API KEY}
-                let queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?" + 'lat=' + lat + '&lon=' + lon + "&exclude=minutely,hourly" + "&appid=f57dad49816ca611b4f033260a8b949d"
+                let queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?" + 'lat=' + lat + '&lon=' + lon + "&exclude=minutely,hourly" + "&units=imperial&appid=f57dad49816ca611b4f033260a8b949d"
                 $.ajax({
                     url: queryURL2,
                     method: "GET"
@@ -175,7 +176,8 @@
                         $('#carddate' + hourString).append($('<div>').addClass('row').html('<p>Date: ' + day + '</p>'));
                         $('#cardtemp' + hourString).append($('<div>').addClass('row').html('<p>Temp: ' + response.daily[i].temp.day + '</p>'));
                         $('#cardhumidity' + hourString).append($('<div>').addClass('row').html('<p>Humidity: ' + response.daily[i].humidity + '%</p>'));
-                        $('#cardicon' + hourString).append($('<img>').addClass('row').attr("src", "http://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png").html('<img src="http://openweathermap.org/img/w/"' + response.daily[i].weather[0].icon + ".png"));
+                        $('#cardicon' + hourString).append($('<img>').addClass('row').attr("src", "http://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png"));
+                        // .html('<img src="http://openweathermap.org/img/w/"' + response.daily[i].weather[0].icon + ".png"));
 
 
 
