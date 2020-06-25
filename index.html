@@ -13,29 +13,28 @@
 <body>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-          <h1 class="display-3 text-center"><strong>Weather Dashboard</strong></h1>
+            <h1 class="display-3 text-center"><strong>Weather Dashboard</strong></h1>
         </div>
-      </div>
+    </div>
 
-    <container class="container">
-        <div class="row">
-            <form class="col-3">
-                City: <input type="text" id="citySearch">
-                <button class="btn-click">This is a button</button>
-            </form>
+    <container class="col-md-3 sidebar">
+        <div class="row"></div>
+        <form class="col-3">
+            City: <input type="text" id="citySearch">
+            <button class="btn-click">This is a button</button>
+        </form>
         </div>
         </div>
 
         <div class="col-9 float-right">
             <div class="row">
-                <div class="card-body border">
+                <div class="card-body border" id="current">
                     <p id="cityName">City:</p>
                     <p id="date">Date:</p>
                     <p id="icon">Icon:</p>
                     <p id="temp">Temp:</p>
                     <p id="humidity">Humidity:</p>
                     <p id="wind">Wind Speeds: </p>
-                    <p id="uvindex">UV index: </p>
                 </div>
             </div>
         </div>
@@ -45,10 +44,10 @@
             <div class="card deck border"></div>
             <div class="card text-white bg-dark border" style="max-width: 18rem; max-height:">
                 <div class="card-body" id='card-1'>
-                    <p id="card-1date"></p>
-                    <p id="card-1icon"></p>
-                    <p id="card-1temp">Temp:</p>
-                    <p id="card-1humidity">Humidity:</p>
+                    <p id="carddate1"></p>
+                    <p id="cardicon1"></p>
+                    <p id="cardtemp1"></p>
+                    <p id="cardhumidity1"></p>
                 </div>
             </div>
 
@@ -56,10 +55,10 @@
 
             <div class="card text-white bg-dark border" style="max-width: 18rem; max-height:">
                 <div class="card-body" id='card-2'>
-                    <p id="card-2date"></p>
-                    <p id="card-2icon"></p>
-                    <p id="card-2temp">Temp:</p>
-                    <p id="card-2humidity">Humidity:</p>
+                    <p id="carddate2"></p>
+                    <p id="cardicon2"></p>
+                    <p id="cardtemp2"></p>
+                    <p id="cardhumidity2"></p>
                 </div>
             </div>
 
@@ -67,10 +66,10 @@
 
             <div class="card text-white bg-dark border" style="max-width: 18rem; max-height:">
                 <div class="card-body" id='card-3'>
-                    <p id="card-3date"></p>
-                    <p id="card-3icon"></p>
-                    <p id="card-3temp">Temp:</p>
-                    <p id="card-3humidity">Humidity:</p>
+                    <p id="carddate3"></p>
+                    <p id="cardicon3"></p>
+                    <p id="cardtemp3"></p>
+                    <p id="cardhumidity3"></p>
                 </div>
             </div>
 
@@ -78,10 +77,10 @@
 
             <div class="card text-white bg-dark border" style="max-width: 18rem; max-height:">
                 <div class="card-body" id='card-4'>
-                    <p id="card-4date"></p>
-                    <p id="card-4icon"></p>
-                    <p id="card-4temp">Temp:</p>
-                    <p id="card-4humidity">Humidity:</p>
+                    <p id="carddate4"></p>
+                    <p id="cardicon4"></p>
+                    <p id="cardtemp4"></p>
+                    <p id="cardhumidity4"></p>
                 </div>
             </div>
 
@@ -89,10 +88,10 @@
 
             <div class="card text-white bg-dark border" style="max-width: 18rem; max-height:">
                 <div class="card-body" id='card-5'>
-                    <p id="card-5date"></p>
-                    <p id="card-5icon"></p>
-                    <p id="card-5temp">Temp:</p>
-                    <p id="card-5humidity">Humidity:</p>
+                    <p id="carddate5"></p>
+                    <p id="cardicon5"></p>
+                    <p id="cardtemp5"></p>
+                    <p id="cardhumidity5"></p>
                 </div>
             </div>
         </div>
@@ -136,6 +135,10 @@
                 //Retrieving moment JS information for the current date/ time/ month
                 $('#date').append(retrieveWeekdayMoDay)
 
+                //Pulling the Icon from the API
+                let iconurl = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
+                icon.append('<img src=' + iconurl + '>');;
+
                 // Pulling from temp from API
                 console.log(response.main.temp);
                 temp.append(tempF);
@@ -158,14 +161,27 @@
                     method: "GET"
                 }).then(function (response) {
                     console.log(response)
+                    let currentEl = $('#current');
+                    currentEl.append($('<p>').html('UV Index: ' + response.current.uvi).attr('id', 'uvIndex'));
                     uvindex.append(response.current.uvi)
-                    
-                    response.daily.forEach(function(day, index){
-                        console.log(day)
-                        
-                    });
-                  
-                }); 
+
+                    // response.daily.forEach(function (day, index) {
+                    //     console.log(day)
+
+                    for (let i = 1; i < 6; i++) {
+                        var hourString = i.toString();
+                        let day = moment.unix(response.daily[i].dt).format('MM-DD');
+
+                        $('#carddate' + hourString).append($('<div>').addClass('row').html('<p>Date: ' + day + '</p>'));
+                        $('#cardtemp' + hourString).append($('<div>').addClass('row').html('<p>Temp: ' + response.daily[i].temp.day + '</p>'));
+                        $('#cardhumidity' + hourString).append($('<div>').addClass('row').html('<p>Humidity: ' + response.daily[i].humidity + '%</p>'));
+                        $('#cardicon' + hourString).append($('<img>').addClass('row').attr("src", "http://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png").html('<img src="http://openweathermap.org/img/w/"' + response.daily[i].weather[0].icon + ".png"));
+
+
+
+                    };
+
+                });
             });
         });
 
