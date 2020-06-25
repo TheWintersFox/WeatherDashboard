@@ -20,9 +20,14 @@
     <container class="col-md-3 sidebar">
         <div class="row"></div>
         <form class="col-3">
-            City: <input type="text" id="citySearch">
-            <button class="btn-click">This is a button</button>
+            Search for a city here: <input type="text" id="citySearch">
+            <button class="btn-click btn-primary">Search</button>
         </form>
+        </div>
+        <div class="row">
+            <div id="recentSearch">
+
+            </div>
         </div>
         </div>
 
@@ -103,13 +108,16 @@
     <!-- <script src="htt[s:/api.windy.com/assets/map-forecast/libBoot.js"></scriptp>
          <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script> -->
 
+
+
     <script type="text/javascript">
 
 
 
         $('.btn-click').on('click', function (e) {
+
             e.preventDefault()
-            const cityName = $('#citySearch').val();
+
             let date = $('#date');
             let icon = $('#icon');
             let temp = $('#temp');
@@ -118,7 +126,35 @@
             let uvindex = $('#uvindex');
             let lat = 0
             let lon = 0
+            const cityName = $('#citySearch').val();
             let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=f57dad49816ca611b4f033260a8b949d";
+            let recentSearches = [];
+
+
+            let scoreArray = localStorage.getItem('recentSearch');
+
+            if (scoreArray) {
+                scoreArray = JSON.parse(scoreArray);
+            } else {
+                scoreArray = [];
+            }
+
+            function storeRecent() {
+                scoreArray.push({ recentSearches });
+                localStorage.setItem('recentSearch', JSON.stringify(scoreArray));
+            }
+            storeRecent();
+
+            // var recent = [];
+            // localStorage.setItem("recentSearch", JSON.stringify(recent));
+            // var storedNames = JSON.parse(localStorage.getItem("recentSearch"));
+            // $('#recentSearch').append($('<button>').addClass('row').html('<p>' + recent + '</p>'));
+
+            // localStorage.setItem('recentSearch', cityName);
+            // let recentSearches = localStorage.getItem('recentSearch');
+            // $('#recentSearch').append($('<button>').addClass('row').html('<p>' + recentSearches + '</p>'));
+
+
 
 
 
