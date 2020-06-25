@@ -128,22 +128,22 @@
             let lon = 0
             const cityName = $('#citySearch').val();
             let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=f57dad49816ca611b4f033260a8b949d";
-            let recentSearches = [];
+            // let recentSearches = [];
 
 
-            let scoreArray = localStorage.getItem('recentSearch');
+            // let scoreArray = localStorage.getItem('recentSearch');
 
-            if (scoreArray) {
-                scoreArray = JSON.parse(scoreArray);
-            } else {
-                scoreArray = [];
-            }
+            // if (scoreArray) {
+            //     scoreArray = JSON.parse(scoreArray);
+            // } else {
+            //     scoreArray = [];
+            // }
 
-            function storeRecent() {
-                scoreArray.push({ recentSearches });
-                localStorage.setItem('recentSearch', JSON.stringify(scoreArray));
-            }
-            storeRecent();
+            // function storeRecent() {
+            //     scoreArray.push({ recentSearches });
+            //     localStorage.setItem('recentSearch', JSON.stringify(scoreArray));
+            // }
+            // storeRecent();
 
             // var recent = [];
             // localStorage.setItem("recentSearch", JSON.stringify(recent));
