@@ -43,12 +43,13 @@
         <div class="col-9 float-right">
             <div class="row">
                 <div class="card-body border" id="current">
-                    <p id="cityName">City:</p>
-                    <p id="date">Date:</p>
-                    <p id="icon">Icon:</p>
-                    <p id="temp">Temp:</p>
-                    <p id="humidity">Humidity:</p>
-                    <p id="wind">Wind Speeds: </p>
+                    <p >City:<span id="cityName"></span> </p>
+                    <p >Date:<span id="date"></span> </p>
+                    <p >Icon:<span id="icon"></span> </p>
+                    <p >Temp:<span id="temp"></span> </p>
+                    <p >Humidity:<span id="humidity"></span> </p>
+                    <p >Wind Speeds:<span id="wind"></span>  </p>
+                    <p >uvIndex:<span id="uvindex"></span> </p>
 
                 </div>
             </div>
@@ -117,20 +118,21 @@
     <!-- <script src="htt[s:/api.windy.com/assets/map-forecast/libBoot.js"></scriptp>
          <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script> -->
 
-<!--
-var cities = [];
- 
-on click of submit
-var citiName = $().val() - grab value from textbox
-cities.push(citiName)
 
-store cities array into localstorage
-
-get cities array from localstorage, loop over it and create button for each city. before you append make sure you clear buttons div so it does not repeat existing cities.
-
--->
 
     <script type="text/javascript">
+
+
+
+        var cities = JSON.parse(localStorage.getItem('cities')) || [];
+        console.log(cities)
+
+        cities.forEach(function (e) {
+            var newButton = $('<button>')
+            newButton.text(e)
+            $('#recentSearch').append(newButton)
+        })
+
 
 
 
@@ -147,6 +149,10 @@ get cities array from localstorage, loop over it and create button for each city
             let lat = 0
             let lon = 0
             const cityName = $('#citySearch').val();
+            cities.push(cityName)
+            localStorage.setItem('cities', JSON.stringify(cities))
+
+
             let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=f57dad49816ca611b4f033260a8b949d";
             // let recentSearches = [];
 
@@ -186,31 +192,37 @@ get cities array from localstorage, loop over it and create button for each city
                 console.log(response);
                 console.log(cityName);
                 let tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
+                $('#cityName').empty()
                 $('#cityName').append(cityName);
 
 
                 //Retrieving moment JS information for the current date/ time/ month
+                $('#date').empty()
                 $('#date').append(retrieveWeekdayMoDay)
 
                 //Pulling the Icon from the API
                 let iconurl = "https://openweathermap.org/img/w/" + response.weather[0].icon + ".png";
-                icon.append('<img src=' + iconurl + '>');;
+                icon.empty()
+                icon.append('<img src=' + iconurl + '>');
 
                 // Pulling from temp from API
                 console.log(response.main.temp);
+                temp.empty()
                 temp.append(tempF);
 
                 // Pulling from humidity from API 
                 console.log(response.main.humidity);
+                humidity.empty()
                 humidity.append(response.main.humidity);
 
                 // Pulling from wind from API
                 console.log(response.wind.speed);
+                wind.empty()
                 wind.append(response.wind.speed);
 
 
-                // lat = response.coord.lat
-                // lon = response.coord.lon
+                lat = response.coord.lat
+                lon = response.coord.lon
                 //https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=hourly,daily&appid={YOUR API KEY}
                 let queryURL2 = "https://api.openweathermap.org/data/2.5/onecall?" + 'lat=' + lat + '&lon=' + lon + "&exclude=minutely,hourly" + "&units=imperial&appid=f57dad49816ca611b4f033260a8b949d"
                 $.ajax({
@@ -218,8 +230,10 @@ get cities array from localstorage, loop over it and create button for each city
                     method: "GET"
                 }).then(function (response) {
                     console.log(response)
-                    let currentEl = $('#current');
-                    currentEl.append($('<p>').html('UV Index: ' + response.current.uvi).attr('id', 'uvIndex'));
+                    
+                    
+                    // currentEl.append($('<p>').html('UV Index: ' + response.current.uvi).attr('id', 'uvIndex'));
+                    uvindex.empty()
                     uvindex.append(response.current.uvi)
 
                     // response.daily.forEach(function (day, index) {
@@ -229,9 +243,13 @@ get cities array from localstorage, loop over it and create button for each city
                         var hourString = i.toString();
                         let day = moment.unix(response.daily[i].dt).format('MM-DD');
 
+                        $('#carddate' + hourString).empty()
                         $('#carddate' + hourString).append($('<div>').addClass('row').html('<p>Date: ' + day + '</p>'));
+                        $('#cardtemp' + hourString).empty()    
                         $('#cardtemp' + hourString).append($('<div>').addClass('row').html('<p>Temp: ' + response.daily[i].temp.day + '</p>'));
+                        $('#cardhumidity' + hourString).empty()
                         $('#cardhumidity' + hourString).append($('<div>').addClass('row').html('<p>Humidity: ' + response.daily[i].humidity + '%</p>'));
+                        $('#cardicon' + hourString).empty()
                         $('#cardicon' + hourString).append($('<img>').addClass('row').attr("src", "http://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png"));
                         // .html('<img src="http://openweathermap.org/img/w/"' + response.daily[i].weather[0].icon + ".png"));
 
